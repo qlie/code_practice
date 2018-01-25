@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+
+	function updateName() {
+		var idx = document.getElementById('idx').value;
+		
+		// 1. 创建XHR对象
+		var xhr = new XMLHttpRequest();
+		// 2. 绑定事件处理程序，更新响应结果到 页面指定位置
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState==4 && xhr.status==200) {
+		    	document.getElementById("name").innerHTML=xhr.responseText;
+		    }
+		}
+		// 3. open打开连接
+		xhr.open('post', 'ajax', true);
+		xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+		// 4. 发送请求
+		xhr.send('idx='+idx);
+	}
+
+</script>
+</head>
+<body>
+
+sdfsfs
+sds
+
+<input type="text" id="idx" value="">
+<input type="button" value="更新" onclick="updateName();">
+
+<h1 id="name">无名氏</h1>
+
+</body>
+</html>

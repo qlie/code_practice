@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HTML5 多文件上传</title>
+</head>
+<body>
+<h1>HTML5 多文件上传</h1>
+<!-- 
+accept: 控制上传的文件类型, 标准 MIME 类型
+multiple: 是否允许选择多个文件
+ -->
+<input type="file" id="pic" name="pic" onchange="printFileInfo()" accept="image/*" multiple="multiple"/><br/>
+<input type="button" value="上传图片" onclick="uploadFile()" /><br />
+<div id="parent">
+　　<div id="msg"></div>
+</div>
+
+<script type="text/javascript">
+function printFileInfo(){
+    var picFile = document.getElementById("pic");    
+    var files = picFile.files;
+    for(var i=0; i<files.length; i++){
+        var file = files[i];
+        var div = document.createElement("div")
+        div.innerHTML = "第("+ (i+1) +") 个文件的名字："+ file.name +
+        " , 文件类型："+ file.type +" , 文件大小:"+ file.size 
+        document.body.appendChild( div)
+    }
+}
+// 上传文件
+function uploadFile() {
+	var xhr = new XMLHttpRequest();
+	// 将上传的多个文件放入formData中
+    var files = document.getElementById("pic").files;
+    var formData = new FormData();
+    for(var i=0; i< files.length; i++){
+        formData.append("file" , files[i] );
+    }
+
+    // 监听事件
+    xhr.upload.addEventListener("progress", onprogress, false);
+    xhr.addEventListener("error", uploadFailed, false);//发送文件和表单自定义参数
+    xhr.open("POST", "upload");
+    // 发送上传数据formData
+	xhr.send(formData);
+}
+
+/**
+ * 侦查附件上传情况    ,这个方法大概0.05-0.1秒执行一次
+ */
+function onprogress(evt){
+	var loaded = evt.loaded;                        // 已经上传大小情况 
+	var total = evt.total;                            // 附件总大小 
+	var per = Math.floor(100*loaded/total);           // 已经上传的百分比  
+	document.getElementById("msg").innerHTML = per +"%";
+}
+//上传失败
+function uploadFailed(evt) {
+    alert("上传失败");
+}
+</script>
+
+</body>
+</html>
